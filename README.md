@@ -114,6 +114,7 @@ flake8
 ### 코드·설정
 
 - PR을 올리기 전에 `black .`, `flake8`, `pytest`를 통과시킨다. CI도 같은 검사를 한다.
+- Dockerfile·의존성·`docker-compose.yml`을 바꾼 PR은 CI가 Docker 이미지를 빌드해 API와 대시보드가 실제로 뜨는지도 확인한다.
 - 설정값은 코드에 직접 쓰지 않고 `configs/`에, 비밀 값은 `.env`에 둔다. `# 명세` 표시가 붙은 값은 바꾸지 않는다.
 - 로직은 `src/roboadvisor/`에 두고, `scripts/`와 노트북은 불러 쓰기만 한다. 대시보드는 `src/`를 import 하지 않고 API로만 통신한다.
 - 새 기능에는 테스트를 붙인다 (각자 자기 모듈 2개 이상).

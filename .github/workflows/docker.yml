@@ -1,0 +1,58 @@
+name: Docker
+
+# Dockerfile·의존성·compose가 바뀌면 이미지를 빌드하고 API와 대시보드가 실제로 뜨는지 확인한다.
+# 동료 평가의 첫 항목이 docker-compose up이라서 둔다. main에 머지된 뒤에는 코드가 바뀔 때도 돈다.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "api/**"
+      - "dashboard/**"
+      - "src/**"
+      - "configs/**"
+      - "requirements.txt"
+      - "pyproject.toml"
+      - "docker-compose.yml"
+      - ".dockerignore"
+      - ".github/workflows/docker.yml"
+  pull_request:
+    paths:
+      - "api/Dockerfile"
+      - "dashboard/Dockerfile"
+      - "dashboard/requirements.txt"
+      - "requirements.txt"
+      - "pyproject.toml"
+      - "docker-compose.yml"
+      - ".dockerignore"
+      - ".github/workflows/docker.yml"
+  workflow_dispatch:
+
+jobs:
+  compose-up:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: 이미지 빌드
+        run: docker compose build
+
+      - name: 실행 (API가 healthy가 될 때까지 대기)
+        run: docker compose up -d --wait --wait-timeout 180
+
+      - name: API·대시보드 응답 확인
+        run: |
+          curl -fsS http://localhost:8000/health
+          for i in $(seq 1 30); do
+            curl -fsS http://localhost:8501/_stcore/health && exit 0
+            sleep 2
+          done
+          echo "대시보드가 응답하지 않음"
+          exit 1
+
+      - name: 실패 시 로그
+        if: failure()
+        run: docker compose logs
+
+      - name: 정리
+        if: always()
+        run: docker compose down
