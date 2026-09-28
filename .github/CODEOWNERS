@@ -11,7 +11,7 @@
 # /configs/baselines.yaml           @B-id
 
 # B 강화학습 → 리뷰 C (리스크 규칙은 D도)
-# /src/roboadvisor/env/             @C-id
+# /src/roboadvisor/trading_env/     @C-id
 # /src/roboadvisor/rl/              @C-id
 # /src/roboadvisor/risk/            @C-id @D-id
 # /configs/trading.yaml             @C-id
