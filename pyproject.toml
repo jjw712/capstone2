@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "roboadvisor"
+version = "0.1.0"
+description = "에이전틱 RAG + 강화학습 통합 로보어드바이저 (캡스톤 38번)"
+readme = "README.md"
+requires-python = ">=3.12"
+# 의존성 버전은 requirements.txt에서 고정한다.
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+extend-exclude = "^/(data|artifacts|notebooks)/"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "src"]
+addopts = "-ra"

@@ -1,0 +1,21 @@
+# 공통 실험 기준 (관리: C, 바꿀 때 A·B와 합의)
+# A는 이 기간의 데이터·기준 전략을, B는 학습을, C는 평가를 여기에 맞춘다.
+
+walk_forward:                  # 명세: 학습 4년 → 테스트 1년, 윈도우 2개 이상, 윈도우마다 재학습
+  # TODO: 윈도우 3개(2025 테스트 포함)로 갈지 회의에서 확정
+  windows:
+    - {id: w1, train: ["2019-01-01", "2022-12-31"], test: ["2023-01-01", "2023-12-31"]}
+    - {id: w2, train: ["2020-01-01", "2023-12-31"], test: ["2024-01-01", "2024-12-31"]}
+    - {id: w3, train: ["2021-01-01", "2024-12-31"], test: ["2025-01-01", "2025-12-31"]}
+
+seeds: [0, 1, 2]               # TODO: ANOVA 표본 단위(evaluation.yaml)와 학습 시간을 보고 확정
+
+strategies:                    # 명세: 벤치마크·동일가중·MVO 대비 비교
+  drl: {rewards: [simple, sharpe, mdd_penalty]}
+  mvo: {}
+  equal_weight: {}
+  benchmark: {}
+
+lambda_grid: [0.5, 1.0, 2.0, 5.0]   # 명세: mdd_penalty의 λ 탐색 범위 0.5~5.0
+
+run_id_format: "{reward}_{lam}_{window}_s{seed}"   # 예: mdd_penalty_1.0_w1_s0

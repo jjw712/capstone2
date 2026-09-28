@@ -1,0 +1,21 @@
+# 데이터 수집·전처리 (관리: A)
+
+collection:
+  start: "2018-01-01"          # 첫 학습 구간(2019) 앞에 지표·관측 윈도우 준비 기간 1년
+  end: null                    # null이면 오늘까지
+  price_field: adj_close       # 명세: 수정주가
+  min_years: 5                 # 명세: 5년 이상
+
+preprocessing:
+  returns: log                 # 명세: 로그 수익률
+  missing: ffill_then_drop     # 명세: Forward Fill 후 남은 결측 제거
+  normalization: zscore        # 명세: Z-score 또는 Min-Max
+  fit_on: train_only           # 정규화 통계는 학습 구간에서만 계산 (미래 정보 누수 방지)
+
+indicators:                    # 명세: 기술적 지표 2개 이상
+  rsi: {window: 14}
+  macd: {fast: 12, slow: 26, signal: 9}
+
+paths:
+  raw: data/raw
+  processed: data/processed

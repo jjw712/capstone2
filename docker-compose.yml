@@ -1,0 +1,31 @@
+# docker compose up --build  →  API(8000) + 대시보드(8501)
+services:
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  dashboard:
+    # 빌드 범위가 dashboard/ 뿐이라 이미지 안에 모델·src가 없다 (API로만 통신)
+    build: ./dashboard
+    environment:
+      API_URL: http://api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      api:
+        condition: service_healthy

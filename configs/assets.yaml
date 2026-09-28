@@ -1,0 +1,20 @@
+# 자산 목록 (관리: A)
+# 이 순서가 모든 배열(관측값·비중)의 기준 순서다. 순서를 바꾸면 기존 모델과 호환되지 않는다.
+# TODO: 국내(pykrx)·해외(yfinance)·혼합 구성은 회의에서 확정. 아래는 명세 예시를 바탕으로 한 초안.
+
+assets:  # 명세: 10개 이상
+  - {ticker: SPY, name: "S&P 500", asset_class: us_equity, source: yfinance}
+  - {ticker: QQQ, name: "나스닥 100", asset_class: us_equity, source: yfinance}
+  - {ticker: IWM, name: "러셀 2000", asset_class: us_equity, source: yfinance}
+  - {ticker: EFA, name: "선진국(미국 제외)", asset_class: intl_equity, source: yfinance}
+  - {ticker: EEM, name: "신흥국", asset_class: intl_equity, source: yfinance}
+  - {ticker: AGG, name: "미국 종합채권", asset_class: bond, source: yfinance}
+  - {ticker: TLT, name: "미국 장기국채", asset_class: bond, source: yfinance}
+  - {ticker: GLD, name: "금", asset_class: commodity, source: yfinance}
+  - {ticker: VNQ, name: "미국 리츠", asset_class: real_estate, source: yfinance}
+  - {ticker: DBC, name: "원자재", asset_class: commodity, source: yfinance}
+
+benchmark:  # 명세: KOSPI 또는 S&P500
+  ticker: "^GSPC"
+  name: "S&P 500 지수"
+  source: yfinance

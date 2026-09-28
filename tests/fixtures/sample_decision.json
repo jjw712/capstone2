@@ -1,0 +1,15 @@
+{
+  "decision_id": "d-2025-03-10-001",
+  "as_of": "2025-03-10",
+  "created_at": "2025-03-10T16:00:00+09:00",
+  "model_version": "mdd_penalty_1.0_w3_s0",
+  "model_weights": {"SPY": 0.3, "QQQ": 0.2, "TLT": 0.3, "GLD": 0.2},
+  "final_weights": {"SPY": 0.35, "QQQ": 0.05, "TLT": 0.35, "GLD": 0.25},
+  "applied_tags": ["rt-2025-03-10-QQQ-1"],
+  "applied_rules": ["risk_tag_cap"],
+  "safeguard_action": null,
+  "shap_top_factors": [
+    {"feature": "QQQ_rsi", "value": 0.62, "contribution": -0.04},
+    {"feature": "TLT_log_return_5d", "value": 0.023, "contribution": 0.03}
+  ]
+}

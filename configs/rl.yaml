@@ -1,0 +1,28 @@
+# 강화학습 (관리: B)
+
+observation:
+  window: 40                   # TODO: 명세 권장 20~60 거래일. 선택 근거를 리포트에 기록
+  features: [log_return, rsi, macd]   # 명세: 과거 N일 수익률 + 기술적 지표 2개 이상
+  include_weights: true        # 명세: 현재 포트폴리오 비중 포함
+  include_risk_tags: false     # 관측 경로 실험 때 true
+
+action:
+  type: continuous             # 명세: 연속 비중 조절 또는 이산 리밸런싱
+
+reward:                        # 명세: 3가지 변형 (λ 탐색 범위는 experiments.yaml)
+  variants:
+    simple: {}                 # r_t
+    sharpe: {vol_window: 20}   # r_t / σ_t
+    mdd_penalty: {lambda: 1.0} # r_t − λ·MDD_t
+
+ppo:                           # Stable-Baselines3 기본값에서 시작
+  policy: MlpPolicy
+  learning_rate: 0.0003
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.0
+  total_timesteps: 100000      # 명세: 최소 100,000 스텝

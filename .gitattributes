@@ -1,0 +1,2 @@
+# 저장소 안의 줄바꿈을 LF로 통일 (Windows·macOS 팀원 간 불필요한 diff 방지)
+* text=auto

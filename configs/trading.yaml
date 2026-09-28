@@ -1,0 +1,18 @@
+# 거래 규칙 (관리: B)
+# 강화학습 환경과 모든 백테스트(MVO·동일가중 포함)가 이 값을 같이 쓴다.
+
+costs:
+  fee_rate: 0.00015            # 명세: 거래 수수료 0.015%
+  slippage_rate: 0.0005        # 명세: 슬리피지 0.05%
+
+constraints:
+  long_only: true
+  max_weight: null             # TODO: 강화학습에도 MVO와 같은 40% 상한을 둘지 결정
+
+safeguard:
+  max_drawdown: 0.15           # 명세: MDD 15% 초과 시 에피소드 조기 종료
+  on_breach: terminate_episode
+
+risk_tag_rules:                # 리스크 태그 → 비중 상한 (규칙 경로)
+  severity_threshold: 0.7      # TODO: B·D 합의
+  capped_weight: 0.05          # TODO: 태그가 걸린 자산의 비중 상한

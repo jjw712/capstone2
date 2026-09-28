@@ -1,0 +1,13 @@
+# 기준 전략 (관리: A)
+# 거래비용은 trading.yaml 값을 강화학습과 똑같이 적용한다.
+
+equal_weight:
+  rebalance: monthly           # 매월 첫 거래일
+
+mvo:                           # 명세 6번
+  objective: max_sharpe        # TODO: max_sharpe / min_variance 중 선택, 근거를 리포트에 기록
+  cov_lookback_days: 252       # 명세: 과거 252 거래일 롤링 공분산
+  long_only: true              # 명세: 공매도 금지
+  max_weight: 0.40             # 명세: 개별 자산 최대 40%
+  rebalance: monthly           # 명세: 월 1회(매월 첫 거래일) 또는 분기 1회
+  optimizer: scipy_minimize    # 명세: scipy.optimize.minimize, 수렴 여부 확인

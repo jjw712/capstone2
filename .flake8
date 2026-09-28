@@ -1,0 +1,5 @@
+[flake8]
+# black과 충돌하는 규칙은 끈다
+max-line-length = 88
+extend-ignore = E203, E701, E704
+exclude = .git, __pycache__, .venv, venv, build, dist, data, artifacts, notebooks

@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      - name: 코드 스타일 (black, flake8)
+        run: |
+          pip install -r requirements-dev.txt
+          black --check .
+          flake8
+
+      - name: 의존성 설치
+        run: |
+          # torch는 requirements.txt와 같은 버전의 CPU 빌드를 먼저 설치한다 (CUDA 빌드는 수 GB)
+          pip install "$(grep -E '^torch==' requirements.txt | sed 's/[[:space:]].*//')" --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+          pip install --no-deps -e .
+
+      - name: 테스트 (pytest)
+        run: pytest

@@ -1,0 +1,17 @@
+# API 이미지 빌드에 필요 없는 것 (특히 .env가 이미지에 들어가지 않게)
+.git
+.github
+.venv
+venv
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.env
+.env.*
+data
+artifacts
+notebooks
+reports
+docs
+tests
+dashboard

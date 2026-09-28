@@ -1,0 +1,18 @@
+{
+  "question": "[가짜 예시] QQQ 비중을 줄여야 할까?",
+  "answer": "[가짜 예시] 실적 쇼크 보도가 있어 단기 변동성이 커질 수 있다.",
+  "citations": [
+    {
+      "title": "[가짜 예시] 대형 기술주 실적 쇼크",
+      "url": "https://example.com/news/1",
+      "published_at": "2025-03-10T08:30:00+09:00"
+    }
+  ],
+  "risk_tags": [],
+  "trace": [
+    {"node": "planner", "message": "질문을 실적·거시 두 갈래로 나눔", "at": "2025-03-10T09:00:00+09:00"},
+    {"node": "researcher", "message": "관련성 0.62 → 쿼리 수정 후 재검색", "at": "2025-03-10T09:00:02+09:00"},
+    {"node": "analyst", "message": "출처 1건 기준으로 결론 작성", "at": "2025-03-10T09:00:04+09:00"}
+  ],
+  "confidence": 0.7
+}

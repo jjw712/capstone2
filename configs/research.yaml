@@ -1,0 +1,23 @@
+# 에이전틱 리서치 (관리: D)
+
+collection:                    # 명세: 뉴스 크롤링 규칙
+  sources: [naver_finance_rss, dart]   # TODO: 한국경제 API 사용 여부
+  min_request_interval_sec: 1.0        # 명세: 초당 1회 이하
+  respect_robots_txt: true             # 명세
+  summary_max_chars: 300               # 명세: 본문 요약 300자 이내
+  fields: [title, summary, published_at, url]   # 명세: 저장 형식
+
+vector_store:
+  backend: chroma              # 명세: ChromaDB 또는 Pinecone
+  collection: news
+  persist_dir: data/chroma     # 메타데이터에 원문 URL 필수
+
+retrieval:
+  top_k: 5
+  min_relevance: 0.75          # TODO: 이보다 낮으면 쿼리를 고쳐 재검색 (Self-Correction)
+  max_retries: 2
+
+llm:                           # TODO: OpenAI API / 로컬 모델 회의에서 확정
+  provider: openai
+  model: null
+  temperature: 0.0

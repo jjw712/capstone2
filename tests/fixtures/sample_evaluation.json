@@ -1,0 +1,20 @@
+{
+  "experiment_id": "mdd_penalty_1.0_w1_s0",
+  "strategy": "drl",
+  "window_id": "w1",
+  "test_period": {"start": "2023-01-01", "end": "2023-12-31"},
+  "metrics": {
+    "cumulative_return": 0.12,
+    "cagr": 0.12,
+    "annual_volatility": 0.15,
+    "var_95": 0.021,
+    "cvar_95": 0.031,
+    "max_drawdown": 0.11,
+    "sharpe": 0.8,
+    "sortino": 1.1,
+    "calmar": 1.09,
+    "alpha": 0.01,
+    "beta": 0.9,
+    "information_ratio": 0.2
+  }
+}

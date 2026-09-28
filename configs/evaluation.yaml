@@ -1,0 +1,33 @@
+# 평가·설명·통계 (관리: C)
+
+metrics:                       # 명세: 12개 지표
+  names:
+    - cumulative_return
+    - cagr
+    - annual_volatility
+    - var_95
+    - cvar_95
+    - max_drawdown
+    - sharpe
+    - sortino
+    - calmar
+    - alpha
+    - beta
+    - information_ratio
+  trading_days: 252
+  risk_free_rate: 0.0          # TODO: 무위험 수익률 기준 확정
+  var_confidence: 0.95         # 명세: VaR·CVaR 95%
+
+anova:                         # 명세: 3가지 검증, p < 0.05면 Tukey HSD
+  alpha: 0.05
+  effect_size: eta_squared
+  sample_unit: null            # TODO(C): 월별 수익률 / 시드별 성과 등. 시드 수와 학습량이 여기서 정해진다
+
+regimes:                       # 검증 3(Two-way ANOVA)의 시장 국면: 상승·횡보·하락
+  method: rolling_return       # TODO(C): 국면 정의 확정
+  window: 60
+  thresholds: {bull: 0.05, bear: -0.05}
+
+shap:                          # 명세: Summary Plot·Force Plot 각 1개 이상
+  explainer: null              # TODO(C): kernel / deep / 대리 모델 중 선택 (응답 5초 고려)
+  background_samples: 100
