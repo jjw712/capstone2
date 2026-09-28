@@ -15,4 +15,6 @@ FastAPI 서버. 요청을 받아 `roboadvisor.services`를 부르고 결과를 �
 | `POST /research` | 예정 (결과를 바로 응답, 5초 이내) |
 | `GET /backtest` | 예정 |
 
+명세상 모든 결과물에 면책 조항이 있어야 하므로, 비중 추천·리서치 응답에는 `disclaimer` 필드로 `roboadvisor.DISCLAIMER` 문구를 넣는다.
+
 로컬 실행 (저장소 루트에서): `uvicorn api.main:app --reload`
