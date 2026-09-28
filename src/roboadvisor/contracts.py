@@ -170,7 +170,7 @@ class RunManifest(BaseModel):
 
     experiment_id: str
     reward: Literal["simple", "sharpe", "mdd_penalty"]
-    reward_lambda: float | None = None  # mdd_penalty일 때만
+    mdd_lambda: float | None = None  # MDD 페널티 강도 λ, mdd_penalty일 때만
     window_id: str
     train_period: Period
     seed: int

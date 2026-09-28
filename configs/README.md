@@ -1,6 +1,6 @@
 # configs/
 
-모든 설정값을 모아 두는 곳. 코드에 숫자나 경로를 직접 쓰지 말고 `roboadvisor.config.load_config("파일명")`으로 읽는다. API 키 같은 비밀 값은 여기가 아니라 `.env`에 둔다.
+모든 설정값을 모아 두는 곳. 코드에 숫자를 직접 쓰지 말고 `roboadvisor.config.load_config("파일명")`으로 읽는다. API 키 같은 비밀 값은 여기가 아니라 `.env`에 둔다. 파일 저장 경로는 여기 두지 않고 `roboadvisor.config.get_settings()`의 `raw_dir`, `processed_dir`, `chroma_dir`, `runs_dir`, `serving_dir`를 쓴다.
 
 | 파일 | 내용 | 관리 |
 |---|---|---|

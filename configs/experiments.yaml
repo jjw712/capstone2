@@ -16,6 +16,6 @@ strategies:                    # 명세: 벤치마크·동일가중·MVO 대비 
   equal_weight: {}
   benchmark: {}
 
-lambda_grid: [0.5, 1.0, 2.0, 5.0]   # 명세: mdd_penalty의 λ 탐색 범위 0.5~5.0
+mdd_lambda_grid: [0.5, 1.0, 2.0, 5.0]   # 명세: mdd_penalty의 λ 탐색 범위 0.5~5.0
 
-run_id_format: "{reward}_{lam}_{window}_s{seed}"   # 예: mdd_penalty_1.0_w1_s0
+run_id_format: "{reward}_{mdd_lambda}_{window}_s{seed}"   # 예: mdd_penalty_1.0_w1_s0

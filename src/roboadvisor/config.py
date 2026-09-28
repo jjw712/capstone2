@@ -34,6 +34,24 @@ class Settings(BaseSettings):
         "sqlite:///" + (PROJECT_ROOT / "data" / "app" / "app.db").as_posix()
     )
 
+    # 저장 경로는 여기서만 정한다 (configs/*.yaml에 두지 않는다)
+    @property
+    def raw_dir(self) -> Path:
+        return self.data_dir / "raw"
+
+    @property
+    def processed_dir(self) -> Path:
+        return self.data_dir / "processed"
+
+    @property
+    def chroma_dir(self) -> Path:
+        return self.data_dir / "chroma"
+
+    @property
+    def runs_dir(self) -> Path:
+        """실험별 산출물 묶음 (Git 제외)."""
+        return self.artifacts_dir / "runs"
+
     @property
     def serving_dir(self) -> Path:
         """API가 읽는 모델·결과 묶음 위치."""

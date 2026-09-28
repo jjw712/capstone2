@@ -16,6 +16,4 @@ indicators:                    # 명세: 기술적 지표 2개 이상
   rsi: {window: 14}
   macd: {fast: 12, slow: 26, signal: 9}
 
-paths:
-  raw: data/raw
-  processed: data/processed
+# 저장 경로는 여기 두지 않는다. get_settings().raw_dir, processed_dir를 쓴다.
