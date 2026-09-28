@@ -14,4 +14,4 @@ portfolio_history.parquet
 learning_curve.csv
 ```
 
-**`serving/`**: API가 읽는 묶음. **Git에 올린다.** 평가자가 clone 후 `docker compose up`만 해도 모델이 로드되고 성과가 조회되도록, 고른 모델 묶음과 `/backtest`·ANOVA·SHAP 조회용 결과 파일을 여기 둔다.
+**`serving/`**: API가 읽는 묶음. **Git에 올린다.** 평가자가 clone 후 `docker compose up`만 해도 모델이 로드되고 성과가 조회되도록, 고른 모델 묶음과 `/backtest`·ANOVA·SHAP 조회용 결과 파일을 여기 둔다. 파일 구성 추천안은 `docs/interfaces.md`의 "아직 정할 것"에 있다.

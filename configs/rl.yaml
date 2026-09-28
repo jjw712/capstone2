@@ -13,7 +13,7 @@ reward:                        # 명세: 3가지 변형 (λ 탐색 범위는 exp
   variants:
     simple: {}                 # r_t
     sharpe: {vol_window: 20}   # r_t / σ_t
-    mdd_penalty: {lambda: 1.0} # r_t − λ·MDD_t
+    mdd_penalty: {mdd_lambda: 1.0}   # r_t − λ·MDD_t
 
 ppo:                           # Stable-Baselines3 기본값에서 시작
   policy: MlpPolicy

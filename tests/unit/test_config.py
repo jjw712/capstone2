@@ -46,7 +46,7 @@ def test_walk_forward_trains_four_years_and_tests_one():
 
 
 def test_lambda_grid_within_spec_range():
-    grid = load_config("experiments")["lambda_grid"]
+    grid = load_config("experiments")["mdd_lambda_grid"]
     assert grid and all(0.5 <= lam <= 5.0 for lam in grid)
 
 

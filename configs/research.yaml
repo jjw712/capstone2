@@ -7,10 +7,9 @@ collection:                    # 명세: 뉴스 크롤링 규칙
   summary_max_chars: 300               # 명세: 본문 요약 300자 이내
   fields: [title, summary, published_at, url]   # 명세: 저장 형식
 
-vector_store:
+vector_store:                  # 저장 경로는 get_settings().chroma_dir
   backend: chroma              # 명세: ChromaDB 또는 Pinecone
-  collection: news
-  persist_dir: data/chroma     # 메타데이터에 원문 URL 필수
+  collection: news             # 메타데이터에 원문 URL 필수
 
 retrieval:
   top_k: 5

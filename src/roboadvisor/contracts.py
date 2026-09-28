@@ -13,7 +13,7 @@ from datetime import date, datetime
 from enum import StrEnum
 from typing import Literal, Self
 
-from pydantic import BaseModel, Field, HttpUrl, model_validator
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, model_validator
 
 WEIGHT_SUM_TOLERANCE = 1e-4
 
@@ -27,7 +27,13 @@ def check_weights(weights: dict[str, float]) -> None:
         raise ValueError(f"비중 합이 1이 아닙니다: {total:.6f}")
 
 
-class Source(BaseModel):
+class Contract(BaseModel):
+    """모든 형식의 부모. 형식에 없는 필드가 오면 조용히 버리지 않고 오류를 낸다."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class Source(Contract):
     """출처. 리서치 결과와 에이전트가 만든 리스크 태그에는 반드시 붙는다."""
 
     title: str
@@ -43,7 +49,7 @@ class RiskType(StrEnum):
     VOLUME_ANOMALY = "volume_anomaly"
 
 
-class RiskTag(BaseModel):
+class RiskTag(Contract):
     """D → B·E. 위험 이벤트 한 건."""
 
     tag_id: str
@@ -63,7 +69,7 @@ class RiskTag(BaseModel):
         return self
 
 
-class MarketInput(BaseModel):
+class MarketInput(Contract):
     """E → B. /optimize 입력. TODO(A·B): 피처 전달 형식 확정."""
 
     as_of: date
@@ -76,13 +82,13 @@ class MarketInput(BaseModel):
         return self
 
 
-class ShapFactor(BaseModel):
+class ShapFactor(Contract):
     feature: str
     value: float  # 피처 값
     contribution: float  # SHAP 기여도
 
 
-class Decision(BaseModel):
+class Decision(Contract):
     """B·C·D → E. 비중 결정 한 건. 의사결정 이력 DB에 그대로 저장한다."""
 
     decision_id: str
@@ -105,7 +111,7 @@ class Decision(BaseModel):
         return self
 
 
-class TraceStep(BaseModel):
+class TraceStep(Contract):
     """에이전트의 '현재 생각' 한 줄. 대시보드에 로그로 보여 준다."""
 
     node: str  # planner / researcher / grader / analyst ...
@@ -113,7 +119,7 @@ class TraceStep(BaseModel):
     at: datetime
 
 
-class ResearchResult(BaseModel):
+class ResearchResult(Contract):
     """D → E. 리서치 한 건의 결과."""
 
     question: str
@@ -124,7 +130,7 @@ class ResearchResult(BaseModel):
     confidence: float | None = Field(default=None, ge=0, le=1)
 
 
-class Period(BaseModel):
+class Period(Contract):
     start: date
     end: date
 
@@ -135,7 +141,7 @@ class Period(BaseModel):
         return self
 
 
-class Metrics(BaseModel):
+class Metrics(Contract):
     """명세의 12개 지표. 비율은 소수로 적는다 (0.12 = 12%)."""
 
     cumulative_return: float
@@ -152,7 +158,7 @@ class Metrics(BaseModel):
     information_ratio: float
 
 
-class EvaluationResult(BaseModel):
+class EvaluationResult(Contract):
     """C → E. 전략 하나를 테스트 구간 하나에서 평가한 결과."""
 
     experiment_id: str
@@ -162,7 +168,7 @@ class EvaluationResult(BaseModel):
     metrics: Metrics
 
 
-class RunManifest(BaseModel):
+class RunManifest(Contract):
     """B → C·E. artifacts/runs/<실험 ID>/manifest.json 형식.
 
     모델만 바꾸고 정규화 정보나 자산·피처 순서는 예전 것을 쓰는 실수를 막는다.
@@ -170,7 +176,7 @@ class RunManifest(BaseModel):
 
     experiment_id: str
     reward: Literal["simple", "sharpe", "mdd_penalty"]
-    reward_lambda: float | None = None  # mdd_penalty일 때만
+    mdd_lambda: float | None = None  # MDD 페널티 강도 λ, mdd_penalty일 때만
     window_id: str
     train_period: Period
     seed: int
