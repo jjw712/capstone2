@@ -61,7 +61,7 @@ flake8
 
 ## 협업 규칙
 
-Issue → 브랜치 → PR → CI 통과 → Squash and merge 순서로 작업한다. PR 제목(`<타입>(<범위>): <무엇을 했는지>`)이 그대로 main의 커밋 메시지가 되고, 공통 파일이나 다른 담당의 폴더를 바꾼 PR만 리뷰를 받는다. 자세한 규칙은 [CONTRIBUTING.md](CONTRIBUTING.md)에 있다.
+Issue → 브랜치 → PR → CI 통과 → Squash and merge 순서로 작업한다. PR 제목(`<타입>(<범위>): <무엇을 했는지>`)이 그대로 main의 커밋 메시지가 되고, PR은 승인 없이 셀프 머지하되, 공통 파일이나 다른 담당의 폴더를 바꿨으면 해당 담당에게 알린다. 자세한 규칙은 [CONTRIBUTING.md](CONTRIBUTING.md)에 있다.
 
 ## 제출 전 채울 항목
 
