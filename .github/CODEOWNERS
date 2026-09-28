@@ -1,43 +1,22 @@
-# 역할 배정 후 @X-id를 실제 GitHub 아이디로 바꾸고 줄 앞의 #을 지운다.
-# 여기 적힌 사람이 해당 경로를 바꾸는 PR의 리뷰어로 자동 지정된다 (PR 작성자는 제외).
-# 규칙: 결과물을 받아 쓰는 사람이 리뷰한다. A의 PR은 B, B는 C, C는 A, D는 E, E는 D.
-# 한 파일에 여러 줄이 맞으면 아래쪽 줄이 우선한다.
+# 공통 파일, 그리고 다른 담당 폴더에 있는 파일을 바꾸는 PR에만 리뷰어를 자동으로 지정한다 (README "리뷰" 참고).
+# 자기 담당 폴더만 바꾸는 PR은 리뷰 없이 머지할 수 있어서 여기에 적지 않는다.
+# 역할 배정 후 @X-id를 실제 GitHub 아이디로 바꾸고 줄 앞의 #을 지운다. PR 작성자는 자동으로 빠진다.
+# main 보호 설정상, 여기 적힌 파일을 바꾼 PR은 이 사람들 중 한 명의 승인이 있어야 머지된다.
 
-# A 데이터·퀀트 → 리뷰 B
-# /src/roboadvisor/data/            @B-id
-# /src/roboadvisor/baselines/       @B-id
-# /configs/assets.yaml              @B-id
-# /configs/data.yaml                @B-id
-# /configs/baselines.yaml           @B-id
-
-# B 강화학습 → 리뷰 C (리스크 규칙은 D도)
-# /src/roboadvisor/trading_env/     @C-id
-# /src/roboadvisor/rl/              @C-id
-# /src/roboadvisor/risk/            @C-id @D-id
-# /configs/trading.yaml             @C-id
-# /configs/rl.yaml                  @C-id
-
-# C 설명·평가 → 리뷰 A
-# /src/roboadvisor/evaluation/      @A-id
-# /configs/evaluation.yaml          @A-id
-
-# D 리서치·RAG → 리뷰 E
-# /src/roboadvisor/research/        @E-id
-# /configs/research.yaml            @E-id
-
-# E 백엔드·화면 → 리뷰 D
-# /api/                             @D-id
-# /dashboard/                       @D-id
-# /src/roboadvisor/storage/         @D-id
-# /src/roboadvisor/services/        @D-id
-# /src/roboadvisor/config.py        @D-id
-# /.github/                         @D-id
-# /docker-compose.yml               @D-id
-
-# 예외 (위 규칙보다 우선)
-# 지표 모듈은 A가 짜고 C가 쓴다
-# /src/roboadvisor/evaluation/metrics.py   @C-id
-# 공통 형식·실험 기준은 관련된 사람 전원
+# 역할 간 데이터 형식: 전원
 # /src/roboadvisor/contracts.py            @A-id @B-id @C-id @D-id @E-id
 # /docs/interfaces.md                      @A-id @B-id @C-id @D-id @E-id
+
+# API 요청·응답 형식: 전원 (탭 담당이 모두 씀)
+# /api/schemas.py                          @A-id @B-id @C-id @D-id @E-id
+
+# 공통 실험 기준: A·B·C
 # /configs/experiments.yaml                @A-id @B-id @C-id
+
+# 라이브러리 버전: E (Docker·CI 관리)
+# /requirements.txt                        @E-id
+# /requirements-dev.txt                    @E-id
+# /dashboard/requirements.txt              @E-id
+
+# 다른 담당 폴더에 있는 파일: 지표 모듈은 A가 짜고 C가 쓴다 (서로 리뷰)
+# /src/roboadvisor/evaluation/metrics.py   @A-id @C-id
