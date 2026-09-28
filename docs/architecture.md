@@ -5,7 +5,7 @@ TODO: 제안 발표 전에 확정하고 README·리포트 1장에 넣는다.
 ```mermaid
 flowchart LR
   subgraph offline["미리 실행 (scripts/)"]
-    D1["가격 수집·전처리<br/>data"] --> T["PPO 학습<br/>env · rl"]
+    D1["가격 수집·전처리<br/>data"] --> T["PPO 학습<br/>trading_env · rl"]
     T --> E["Walk-Forward 평가<br/>evaluation"]
     E --> S[("artifacts/serving")]
     N["뉴스 수집·색인<br/>research"] --> V[("ChromaDB")]

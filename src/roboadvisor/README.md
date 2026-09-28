@@ -8,7 +8,7 @@
 | `contracts.py` | 역할 사이 데이터 형식 (Pydantic) | A, 변경은 전원 합의 |
 | `data/` | 가격 수집·전처리·기술지표·기간별 데이터 | A |
 | `baselines/` | MVO·동일가중 기준 전략 | A |
-| `env/` | Gymnasium 거래 환경·거래비용 계산·보상 함수 | B |
+| `trading_env/` | Gymnasium 거래 환경·거래비용 계산·보상 함수 | B |
 | `risk/` | Safe-Guard·리스크 태그 규칙 | B (D와 연동) |
 | `rl/` | PPO 학습·추론·모델 묶음 로드 | B |
 | `evaluation/` | Walk-Forward·백테스트·지표·통계·SHAP | C |
