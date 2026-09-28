@@ -1,0 +1,36 @@
+name: PR title
+
+# 스쿼시 머지라서 PR 제목이 main의 커밋 메시지가 된다. 제목이 CONTRIBUTING.md 형식에 맞는지 검사한다.
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  pr-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 제목 형식 검사
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        shell: python3 {0}
+        run: |
+          import os
+          import re
+          import sys
+
+          title = os.environ["TITLE"]
+          pattern = r"(feat|fix|refactor|test|docs|exp|chore)(\([a-z_]+\))?!?: (\S.*)"
+          m = re.fullmatch(pattern, title)
+          if not m:
+              print(f"::error::PR 제목이 형식에 맞지 않습니다: {title}")
+              print("형식: <타입>(<범위>): <무엇을 했는지>  예: feat(data): yfinance 수정주가 수집기 추가")
+              print("타입: feat, fix, refactor, test, docs, exp, chore (CONTRIBUTING.md 참고)")
+              sys.exit(1)
+          description = m.group(3)
+          if len(description) > 50:
+              print(f"::error::설명이 50자를 넘습니다 ({len(description)}자): {description}")
+              sys.exit(1)
+          if description.endswith("."):
+              print("::error::설명 끝에는 마침표를 찍지 않습니다")
+              sys.exit(1)
+          print(f"OK: {title}")
