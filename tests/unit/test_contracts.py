@@ -46,6 +46,13 @@ def test_agent_risk_tag_requires_source(load_fixture):
         RiskTag.model_validate(data)
 
 
+def test_unknown_field_is_rejected(load_fixture):
+    data = load_fixture("sample_risk_tag.json")
+    data["typo_field"] = 1
+    with pytest.raises(ValidationError):
+        RiskTag.model_validate(data)
+
+
 def test_risk_severity_is_between_zero_and_one(load_fixture):
     data = load_fixture("sample_risk_tag.json")
     data["severity"] = 1.5
