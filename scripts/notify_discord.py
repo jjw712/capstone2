@@ -194,6 +194,14 @@ def main() -> int:
         )
         return 0
 
+    # 2026-10-13부터: 수집(data.update)은 평일 매일 돌지만, 알림은 금요일에만 보낸다
+    # (성공한 평일은 조용히 쌓아두고, 실패는 위에서 이미 항상 보냄). 금요일엔
+    # week_digest()가 그 주 월~금 로그를 전부 읽어 일별 현황을 만들어야 하므로
+    # 평일 실행 자체는 계속 필요하다 — 끄는 건 Discord 알림뿐이다.
+    if not weekly:
+        print("[notify] 평일 — 조용히 종료 (데이터는 갱신됨, 알림은 금요일에)")
+        return 0
+
     detail = [
         line.replace("[update] ", "")
         for line in run
@@ -204,10 +212,6 @@ def main() -> int:
         None,
     )
     n_checks = sum(1 for line in run if line.endswith("-> OK"))
-    if added is None and not weekly:
-        print("[notify] 새 거래일 없음 — 조용히 종료")
-        return 0
-
     if added:
         text = (
             f"{prefix}✅ **데이터 갱신 완료** ({header})\n```\n"
@@ -216,9 +220,6 @@ def main() -> int:
         )
     else:
         text = f"{prefix}· **{header}** 새 거래일 없음 (휴장일)"
-    if not weekly:
-        print("[notify] HTTP", post(url, text))
-        return 0
 
     last_date = sorted(pd_dates(PROCESSED / "returns.parquet"))[-1]
     text += (
