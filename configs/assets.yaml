@@ -1,20 +1,42 @@
-# 자산 목록 (관리: A)
-# 이 순서가 모든 배열(관측값·비중)의 기준 순서다. 순서를 바꾸면 기존 모델과 호환되지 않는다.
-# TODO: 국내(pykrx)·해외(yfinance)·혼합 구성은 회의에서 확정. 아래는 명세 예시를 바탕으로 한 초안.
+# 자산 11개와 순서 (A -> B 데이터 명세 1.1). 이 순서가 모든 배열의 기준 순서다.
+# 티커는 반드시 따옴표로 감쌀 것 — 안 그러면 YAML이 8진수로 읽는다
+# (000660 -> 432, 035420 -> 15120; 명세서에서 실제 확인된 버그).
+assets:
+  - ticker: "005930"
+    name: 삼성전자
+    asset_class: kr_stock
+  - ticker: "000660"
+    name: SK하이닉스
+    asset_class: kr_stock
+  - ticker: "035420"
+    name: NAVER
+    asset_class: kr_stock
+  - ticker: "005380"
+    name: 현대차
+    asset_class: kr_stock
+  - ticker: "105560"
+    name: KB금융
+    asset_class: kr_stock
+  - ticker: "069500"
+    name: KODEX 200
+    asset_class: kr_equity
+  - ticker: "133690"
+    name: TIGER 미국나스닥100
+    asset_class: us_equity
+  - ticker: "148070"
+    name: KIWOOM 국고채10년
+    asset_class: bond
+  - ticker: "114260"
+    name: KODEX 국고채3년
+    asset_class: bond
+  - ticker: "132030"
+    name: KODEX 골드선물(H)
+    asset_class: commodity
+  - ticker: "261240"
+    name: KODEX 미국달러선물
+    asset_class: currency
 
-assets:  # 명세: 10개 이상
-  - {ticker: SPY, name: "S&P 500", asset_class: us_equity, source: yfinance}
-  - {ticker: QQQ, name: "나스닥 100", asset_class: us_equity, source: yfinance}
-  - {ticker: IWM, name: "러셀 2000", asset_class: us_equity, source: yfinance}
-  - {ticker: EFA, name: "선진국(미국 제외)", asset_class: intl_equity, source: yfinance}
-  - {ticker: EEM, name: "신흥국", asset_class: intl_equity, source: yfinance}
-  - {ticker: AGG, name: "미국 종합채권", asset_class: bond, source: yfinance}
-  - {ticker: TLT, name: "미국 장기국채", asset_class: bond, source: yfinance}
-  - {ticker: GLD, name: "금", asset_class: commodity, source: yfinance}
-  - {ticker: VNQ, name: "미국 리츠", asset_class: real_estate, source: yfinance}
-  - {ticker: DBC, name: "원자재", asset_class: commodity, source: yfinance}
-
-benchmark:  # 명세: KOSPI 또는 S&P500
-  ticker: "^GSPC"
-  name: "S&P 500 지수"
-  source: yfinance
+benchmark:
+  ticker: "1001"
+  name: 코스피
+  source: krx

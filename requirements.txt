@@ -9,6 +9,7 @@ pandas==2.3.3          # pykrx가 아직 pandas 3을 지원하지 않음
 pyarrow==25.0.1
 scipy==1.18.1
 yfinance==1.7.0
+finance-datareader==0.9.202   # naver 수정 종가 (명세 지정 소스)
 pykrx==1.2.9
 
 # 강화학습 (B)
