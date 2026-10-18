@@ -25,6 +25,9 @@ from .build_processed import OUT_DIR, build_returns_for_ticker, indicators, load
 OVERLAP_DAYS = 5  # 겹쳐 받는 저장 거래일 수
 FETCH_LOOKBACK_DAYS = 30  # 원천 호출 시작일 = 마지막 저장일 - 이만큼(달력일)
 RETURN_TOL = 1e-9
+SETTLE_BUFFER_DAYS = (
+    2  # 가장 최근 이만큼의 거래일은 원천이 아직 확정 전일 수 있어 경고 대상에서 뺀다
+)
 
 
 def require_krx_login() -> None:
@@ -62,11 +65,25 @@ def update(processed_dir: Path = OUT_DIR, end: str | None = None) -> dict:
     calendar = overlap.append(new_dates)
     warnings: list[str] = []
 
+    # naver 종가는 장 마감 직후에 받아도 하루이틀 안에 한 번 더 조용히 정정되는 경우가
+    # 있다(2026-10 급락장에서 실측: 10/13 종가를 그날 장 마감 직후·10/15·10/16 세 번
+    # 받아봤더니 10/15까지는 값이 계속 바뀌다가 10/16에야 안정됐다 — 하루 늦게 받아도
+    # 안전하지 않았다). calendar의 가장 최근 SETTLE_BUFFER_DAYS 거래일은 아직
+    # 확정 전일 수 있다고 보고 겹침 경고 대상에서 뺀다 — 그보다 오래된 날짜가
+    # 바뀌는 것만 "원천 수정"으로 보고한다(그 경우는 진짜 이상 신호이므로).
+    settled = (
+        calendar[:-SETTLE_BUFFER_DAYS]
+        if len(calendar) > SETTLE_BUFFER_DAYS
+        else calendar[:0]
+    )
+
     new_bench = bench_raw.loc[new_dates, ["close", "simple_return"]].reset_index()
+    bench_check = bench_raw.loc[calendar, "simple_return"].iloc[1 : len(overlap)]
+    bench_check_dates = bench_check.index.intersection(settled)
     if (
-        bench_raw.loc[calendar, "simple_return"]
-        .iloc[1 : len(overlap)]
-        .sub(benchmark.set_index("date").loc[overlap[1:], "simple_return"])
+        len(bench_check_dates)
+        and bench_check.loc[bench_check_dates]
+        .sub(benchmark.set_index("date").loc[bench_check_dates, "simple_return"])
         .abs()
         .max()
         > RETURN_TOL
@@ -82,9 +99,15 @@ def update(processed_dir: Path = OUT_DIR, end: str | None = None) -> dict:
         r = r.merge(ck, on=["date", "ticker"])
         saved = returns[returns.ticker == t].set_index("date").sort_index()
 
-        # 겹친 날(첫 행 제외 — 그 행은 앞날이 없어 0으로 둔 값) 수익률 대조
+        # 겹친 날(첫 행 제외 — 그 행은 앞날이 없어 0으로 둔 값) 수익률 대조.
+        # 가장 최근 SETTLE_BUFFER_DAYS거래일은 settled에서 빠져 있어 대조 대상이 아니다.
         ov = r.set_index("date").loc[overlap[1:], "simple_return"]
-        diff = (ov - saved.loc[overlap[1:], "simple_return"]).abs().max()
+        check_dates = ov.index.intersection(settled)
+        diff = (
+            (ov.loc[check_dates] - saved.loc[check_dates, "simple_return"]).abs().max()
+            if len(check_dates)
+            else 0.0
+        )
         if diff > RETURN_TOL:
             warnings.append(
                 f"{t}: 겹친 날 수익률이 저장값과 최대 {diff:.2e} 다름 (원천 수정 가능성)"
@@ -109,7 +132,15 @@ def update(processed_dir: Path = OUT_DIR, end: str | None = None) -> dict:
             .set_index("date")
             .loc[overlap, ["rsi", "macd", "volatility"]]
         )
-        fdiff = (ind.loc[overlap] - old_feat).abs().max().max()
+        feat_check_dates = overlap.intersection(settled)
+        fdiff = (
+            (ind.loc[feat_check_dates] - old_feat.loc[feat_check_dates])
+            .abs()
+            .max()
+            .max()
+            if len(feat_check_dates)
+            else 0.0
+        )
         if fdiff > 1e-9:
             warnings.append(f"{t}: 겹친 날 지표가 저장값과 최대 {fdiff:.2e} 다름")
         nf = ind.loc[new_dates].reset_index().rename(columns={"index": "date"})
