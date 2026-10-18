@@ -58,12 +58,12 @@ def fake_bench(start, end):
     )
 
 
-def write_saved(tmp, n_saved, tamper=False):
+def write_saved(tmp, n_saved, tamper=False, tamper_offset=2):
     r, _, ck = fake_build(TICKER, "kr_stock", None, None, DATES[:n_saved])
     r = r.merge(ck, on=["date", "ticker"])
     r["adj_close"] = 100 * np.cumprod(1 + r["simple_return"].to_numpy())
     if tamper:
-        r.loc[n_saved - 2, "simple_return"] += 0.01
+        r.loc[n_saved - tamper_offset, "simple_return"] += 0.01
     f = indicators(
         r.set_index("date")["adj_close"], r.set_index("date")["log_return"], CFG
     ).reset_index()
@@ -118,3 +118,11 @@ def test_update_warns_when_overlap_return_differs_from_saved(tmp_path):
 def test_update_noop_when_already_latest(tmp_path):
     write_saved(tmp_path, 80)
     assert run_update(tmp_path)["new_days"] == 0
+
+
+def test_update_suppresses_warning_when_only_most_recent_day_differs(tmp_path):
+    """naver가 최근 1~2거래일은 늦게 확정하는 걸 실측으로 확인(2026-10) — 그 구간만
+    달라진 건 경고하지 않는다. 옛날 날짜가 달라지는 test_update_warns_...와 대비."""
+    write_saved(tmp_path, 79, tamper=True, tamper_offset=1)
+    res = run_update(tmp_path)
+    assert res["warnings"] == []
